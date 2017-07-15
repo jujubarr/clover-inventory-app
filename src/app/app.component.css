@@ -1,0 +1,19 @@
+div {
+	padding: 80px;
+	padding-top: 20px;
+}
+h1 {
+	outline: 5px;
+	border-width: 0 0 5px 0;
+	border-color: #5bc0de;
+	padding: 20px 80px;
+}
+
+.fa {
+	padding: 0 20px;
+	color: #5bc0de;
+}
+
+hr {
+	border-top: 3px solid #5bc0de;
+}

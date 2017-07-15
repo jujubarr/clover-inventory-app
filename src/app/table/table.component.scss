@@ -1,0 +1,75 @@
+.table-wrapper {
+	header * {
+		vertical-align: middle;
+	    display: inline;
+	}
+	table {
+	    margin-top: 40px;
+
+		th {
+			background: lightgray;
+		}
+	}
+
+	.fa {
+		cursor: pointer;
+	}
+}
+
+
+.modal-dialog {
+	font-size: 20px;
+
+	table {
+		th {
+			background: white;
+			color: #5bc0de;
+
+			&.black {
+				color: #292b2c;
+				padding-left: 0px;
+			}
+		}
+
+		input {
+			outline: 0;
+			border-width: 0 0 2px 0;
+			border-color: #5bc0de;
+			width: 200px
+		}
+		input.lightgray {
+			border-color: lightgray;
+		}
+
+		th, td {
+			border: 0px;
+		    padding-right: 30px;
+		}
+	}
+
+	.modal-header, .modal-footer {
+		padding: 30px;
+		border: 0px;
+	}
+
+	.modal-header {
+		padding-bottom: 0px;
+	}
+
+	.modal-body {
+		padding: 30px;
+	}
+
+	.modal-title {
+		line-height: 1.0;
+	}
+
+	button {
+		padding: 0px;
+		padding-left: 20px;
+		background: white;
+		color: #5bc0de;
+		font-size: 20px;
+		font-weight: bold;
+	}
+}

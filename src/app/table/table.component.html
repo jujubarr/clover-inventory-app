@@ -1,0 +1,66 @@
+<div class="table-wrapper">
+	<header>
+		<h2>
+	  	Inventory Items
+	  	</h2>
+	  	<button type="button" class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#itemModal">Add new item</button>
+	</header>
+	<table style="width:100%" class="table table-bordered">
+		<tr>
+			<th>Item Name<i class="fa fa-caret-down pull-right" (click)="sortByName()"></i></th>
+			<th>Quantity<i class="fa fa-caret-down pull-right" (click)="sortByPrice()"></i></th> 
+			<th>Edit</th>
+			<th>Delete</th>
+		</tr>
+		<tr *ngFor="let entry of data">
+			<td id={{entry.id}}>{{entry.name}}</td>
+			<td >{{entry.price}}</td> 
+			<td><i class="fa fa-pencil" data-toggle="modal" data-target="#itemModal" (click)="editItem(name, quantity, entry)"></i></td>
+			<td><i class="fa fa-trash" data-toggle="modal" data-target="#ruSureModal" (click)="setDeleteItemId(entry, deleteItemInput, deleteName)"></i></td>
+		</tr>
+	</table>
+</div>
+<div class="modal modal-md" id="itemModal" role="dialog">
+    <div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+		        <h3 class="modal-title">Add New Item</h3>
+			</div>
+			<div class="modal-body">        
+				<table>
+					<tr>
+						<th>Item Name</th>
+						<th class="black col-sm-1">Quantity</th>
+					</tr>
+					<tr>
+						<td><input #name type="text"></td>
+						<td><input #quantity type="number" class="lightgray"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" (click)="clearInputs(name, quantity)">CANCEL</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" (click)="postItem(name, quantity)">ADD</button>
+			</div>
+		</div>
+    </div>
+</div>
+
+<div class="modal modal-md" id="ruSureModal" role="dialog">
+    <div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+			</div>
+			<div class="modal-body">        
+				<h4>Are you sure you want to delete "<span #deleteName></span>"?</h4>
+			</div>
+			<div class="modal-footer">
+				<input #deleteItemInput hidden type="text">
+				<button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" (click)="deleteItem(deleteItemInput)">DELETE</button>
+			</div>
+		</div>
+    </div>
+</div>
