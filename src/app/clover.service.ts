@@ -9,20 +9,21 @@ export class CloverService {
 	baseUrl: string;
 	token: string;
 	merchant: string;
+	param: string;
 
 	constructor(private http: Http) {
-		this.token = "";
+		this.token = "4bb4f312-66c4-d413-c84c-1e7b6d513db0";
 		this.merchant = "7BSQ5A90DXV4P";
-		this.baseUrl = "https://apisandbox.dev.clover.com/v3/merchants/" + this.merchant;
+		this.baseUrl = "https://sandbox.dev.clover.com/v3/merchants/" + this.merchant;
+		this.param = "?access_token=" + this.token;
+
   }
 
 	getItems(): Observable<any> {
-		let options; //this.getHeaderOptions();
-    return this.http.get(this.baseUrl + '/items?expand=itemStock').map(data => data.json());
+    return this.http.get(this.baseUrl + '/items' + this.param).map(data => data.json());
   }
 
   postItem(id, name, price): Observable<any> {
-  	let options; //this.getHeaderOptions();
   	let itemId = id ? id : "";
   	let payload = {
   		"id": id,
@@ -30,23 +31,12 @@ export class CloverService {
 			"price": price
 		};
 
-    return this.http.post(this.baseUrl + '/items/' + itemId, payload);
+    return this.http.post(this.baseUrl + '/items/' + itemId + this.param, payload);
   }
 
   deleteItem(id): Observable<any> {
-  	let options; //this.getHeaderOptions();
-  	return this.http.delete(this.baseUrl + '/items/' + id);
+  	return this.http.delete(this.baseUrl + '/items/' + id + this.param);
   }
-
-  getHeaderOptions() {
-		let headers = new Headers();
-		headers.append('Accept', 'application/json');
-		headers.append("Content-Type", 'application/json');
-		// headers.append('Authorization', `Bearer ${this.token}`);
-		let options = new RequestOptions({ headers: headers });
-
-		return options;
-	}
 }
 
 

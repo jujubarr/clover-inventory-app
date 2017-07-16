@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Observable } from "rxjs";
 import { CloverService } from '../clover.service';
 
@@ -10,11 +10,15 @@ declare var getParameterByName: any;
   styleUrls: ['./table.component.scss'],
   providers: [CloverService]
 })
+
+
 export class TableComponent implements OnInit {
   data: any;
   priceSortToggle: boolean;
   nameSortToggle: boolean;
   
+  @Output() gotItems: EventEmitter<any> = new EventEmitter();
+
   constructor(private service: CloverService) { 
     this.fetchItems();
   }
@@ -25,6 +29,7 @@ export class TableComponent implements OnInit {
   fetchItems() {
     this.service.getItems().subscribe(data => {
       this.data = data.elements;
+      this.gotItems.emit(this.data);
       console.log('Data:', data);
     },
     err => {

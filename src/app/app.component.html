@@ -3,6 +3,6 @@
 </h1>
 	<hr>
 <div>
-	<inventory-chart></inventory-chart>
-	<inventory-table></inventory-table>
+	<inventory-chart [data]="data"></inventory-chart>
+	<inventory-table (gotItems)="setData($event)"></inventory-table>
 </div>

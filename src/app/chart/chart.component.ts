@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { Observable } from "rxjs";
 import { CloverService } from '../clover.service';
 import * as d3 from 'd3';
@@ -11,49 +11,127 @@ import * as d3 from 'd3';
   providers: [CloverService]
 })
 export class ChartComponent implements OnInit {
-	data: any;
+	// data: any;
+	svg: any;
+	row: number;
+	labelHeight: number;
+  @Input() data: any;
 
   constructor(private service: CloverService) {
-  	this.fetchItems();
+  	// this.fetchItems();
+  	this.row = 1;
+  	this.labelHeight = 40;
   }
 
   ngOnInit() {
-  	this.renderBars();
+  	this.svg = d3.select('#bar-chart svg');
+  	this.renderColumns();
   }
 
-  renderBars() {
-		d3.select('#bar-chart')
-		  .selectAll('div')
-		  .data([4, 8, 15, 16, 23, 42])
-		  .enter()
-		  .append('div')
-		  .classed('bar', true)
-		  .style("height", (d)=> d + "px");
+  ngOnChanges(changes: any) {
+    this.renderColumns();
   }
 
-  renderLabels() {
-  	d3.select('#bar-chart')
-		  .selectAll('div')
-		  .data([4, 8, 15, 16, 23, 42])
+  renderColumns() {
+  	if (!this.data) {
+  		return;
+  	}
+  	
+  	let barWidth = 30;
+  	let svg = this.svg;
+  	let svgBBox = this.getBBox();
+
+		let columns = svg.append('g').classed('bars', true).selectAll('g')
+		  .data(this.data)
 		  .enter()
-		  .append('div')
-		  .classed('label', true)
-		  .style("height", (d)=> d + "px");
+		  .append('g')
+		  .classed('entry', true)
+		  .attr('transform', function(d, i) {
+				return 'translate(' + barWidth * i + ', 0)';
+	    });
+
+  	columns.append('rect')
+  		.classed('bar', true)
+  		.attr("transform", (d) => {
+  			return "translate(-" + barWidth/2 + ", 0)";
+  		})
+			.attr("x", (d, i) => {
+				return (i+0.5) * svgBBox.width / (this.data.length+1);
+			})
+			.attr("y", (d: any) => {
+				return svgBBox.height - this.labelHeight - this.getBarHeightPx(d.price);
+			})
+      .attr("height", (d: any) => {
+      	return this.getBarHeightPx(d.price) + "px";
+      })
+      .attr('width', barWidth + 'px')
+      .style('fill', (d) => {
+      	return this.getColor();
+      })
+      .style('stroke-width', 0);
+
+
+    this.renderLabels(columns, barWidth, svgBBox);
   }
 
-  renderAxis() {
-  	d3.select('#bar-chart')
-		  .selectAll('div')
-		  .data([4, 8, 15, 16, 23, 42])
-		  .enter()
-		  .append('div')
-		  .classed('bar', true)
-		  .style("height", (d)=> d + "px");
+  renderLabels(columns, barWidth, svgBBox) {
+
+  	// label names
+	  columns.append('g').append('text')
+	  	.style("text-anchor", "middle")
+	    .attr('dx', (d, i) => {
+	    	return (i+0.5) * svgBBox.width / (this.data.length+1);
+	    })
+		  .attr('dy', function(d){
+	        return svgBBox.height - 15;
+	    })
+	    .text(function(d: any){
+	        return d.name;
+	    });
+
+    // numbers
+    columns.append('text')
+	    .text(function(d: any){
+	        return d.price;
+	    })
+	  	.style("text-anchor", "middle")
+	    .attr('dx', (d, i) => {
+	    	return (i+0.5) * svgBBox.width / (this.data.length+1);
+	    })
+		  .attr('dy', (d) => {
+	        return svgBBox.height - this.labelHeight - this.getBarHeightPx(d.price);
+	    })
+  }
+
+  getBarHeightPx(price: number) {
+  	let svgBBox = this.getBBox();
+
+  	let h = price / this.row;
+  	return h < svgBBox.height ? h : svgBBox.height;
+  }
+
+  getBBox() {
+  	let svgBBox = {
+  		height: parseInt(this.svg.style('height')),
+  		width: parseInt(this.svg.style('width'))
+  	};
+
+  	return svgBBox;
+  }
+
+  getColor() {
+	  var letters = '0123456789ABCDEF';
+	  var color = '#';
+	  for (var i = 0; i < 6; i++) {
+	    color += letters[Math.floor(Math.random() * 16)];
+	  }
+	  return color;
   }
 
   fetchItems() {
     this.service.getItems().subscribe(data => {
       this.data = data.elements;
+      this.renderColumns();
       console.log('Data:', data);
     },
     err => {

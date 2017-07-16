@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Inventory App';
+  data: any;
+
+  setData(data: any) {
+  	this.data = data;
+  	console.log('Got data!');
+  }
 }
