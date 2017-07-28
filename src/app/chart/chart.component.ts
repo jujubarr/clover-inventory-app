@@ -28,10 +28,17 @@ export class ChartComponent implements OnInit {
   	this.renderColumns();
   }
 
+  /*
+    When data has changed, re-render bars and their labels
+  */
   ngOnChanges(changes: any) {
     this.renderColumns();
   }
 
+
+  /*
+    Renders the bars in the chart and sets their height
+  */
   renderColumns() {
   	if (!this.data) {
   		return;
@@ -74,6 +81,9 @@ export class ChartComponent implements OnInit {
     this.renderLabels(columns, barWidth, svgBBox);
   }
 
+  /*
+    Render the labels on the bottom and the bar values
+  */
   renderLabels(columns, barWidth, svgBBox) {
 
   	// label names
@@ -119,6 +129,9 @@ export class ChartComponent implements OnInit {
   	return svgBBox;
   }
 
+  /*
+    Generate random HEX color code
+  */
   getColor() {
 	  var letters = '0123456789ABCDEF';
 	  var color = '#';
@@ -128,6 +141,9 @@ export class ChartComponent implements OnInit {
 	  return color;
   }
 
+  /*
+    API call to fetch all items in my inventory
+  */ 
   fetchItems() {
     this.service.getItems().subscribe(data => {
       this.data = data.elements;

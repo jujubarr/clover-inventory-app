@@ -26,9 +26,13 @@ export class TableComponent implements OnInit {
   ngOnInit() {
   }
 
+  /*
+    API call to fetch all item rows
+  */
   fetchItems() {
     this.service.getItems().subscribe(data => {
       this.data = data.elements;
+      // emit data so that the chart changes too
       this.gotItems.emit(this.data);
       console.log('Data:', data);
     },
@@ -37,6 +41,7 @@ export class TableComponent implements OnInit {
       console.log('Error:', err);
     });
   }
+
 
   clearInputs(n: HTMLInputElement, q: HTMLInputElement) {
     if (!n || !q) {
@@ -47,6 +52,10 @@ export class TableComponent implements OnInit {
     q.value = '';
   }
 
+
+  /*
+    API call to create/edit item
+  */
   postItem(n: HTMLInputElement, q: HTMLInputElement) {
     if (!n || !q) {
       return;
@@ -61,17 +70,28 @@ export class TableComponent implements OnInit {
     this.clearInputs(n, q);
   }
 
+
+  /*
+    Set the modal with the values I want to edit
+  */
   editItem(n: HTMLInputElement, q: HTMLInputElement, data: any) {
     n.value = data.name;
     n.name = data.id;
     q.value = data.price;
   }
 
+
+  /*
+    Set the values for when the delete icon is clicked
+  */
   setDeleteItemId(data: any, deleteInput: HTMLInputElement, deleteName: HTMLInputElement) {
     deleteInput.value = data.id;
     deleteName.innerHTML = data.name;
   }
 
+  /*
+    API call to delete a row item when confirmation is clicked
+  */
   deleteItem(elem: HTMLInputElement) {
     this.service.deleteItem(elem.value).subscribe(
       (data) => {
@@ -81,6 +101,9 @@ export class TableComponent implements OnInit {
     );
   }
 
+  /*
+    Event handler for sortByPrice
+  */
   sortByPrice() {
     this.priceSortToggle = !this.priceSortToggle;
     if (this.priceSortToggle) {
@@ -95,6 +118,9 @@ export class TableComponent implements OnInit {
     }
   }
 
+  /*
+    Event handler for sortByName
+  */
   sortByName() {
     this.nameSortToggle = !this.nameSortToggle;
     if (this.nameSortToggle) {
@@ -113,6 +139,9 @@ export class TableComponent implements OnInit {
     }
   }
 
+  /*
+    Generic error handler for API calls
+  */
   handleError(err) {
     console.log(err);
     return Observable.throw(err);
