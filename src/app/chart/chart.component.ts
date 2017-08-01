@@ -13,6 +13,7 @@ import * as d3 from 'd3';
 export class ChartComponent implements OnInit {
 	// data: any;
 	svg: any;
+  bars: any;
 	row: number;
 	labelHeight: number;
   @Input() data: any;
@@ -25,6 +26,7 @@ export class ChartComponent implements OnInit {
 
   ngOnInit() {
   	this.svg = d3.select('#bar-chart svg');
+    this.bars = this.svg.append('g').classed('bars', true);
   	this.renderColumns();
   }
 
@@ -48,7 +50,9 @@ export class ChartComponent implements OnInit {
   	let svg = this.svg;
   	let svgBBox = this.getBBox();
 
-		let columns = svg.append('g').classed('bars', true).selectAll('g')
+    this.svg.selectAll('.bars').remove();
+
+		let columns = this.svg.append('g').classed('bars', true).selectAll('g')
 		  .data(this.data)
 		  .enter()
 		  .append('g')
@@ -76,6 +80,8 @@ export class ChartComponent implements OnInit {
       	return this.getColor();
       })
       .style('stroke-width', 0);
+
+    columns.exit().remove();
 
 
     this.renderLabels(columns, barWidth, svgBBox);

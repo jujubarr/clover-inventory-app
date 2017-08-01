@@ -43,20 +43,21 @@ export class TableComponent implements OnInit {
   }
 
 
-  clearInputs(n: HTMLInputElement, q: HTMLInputElement) {
+  clearInputs(n: HTMLInputElement, q: HTMLInputElement, button: HTMLInputElement) {
     if (!n || !q) {
       return;
     }
 
     n.value = '';
     q.value = '';
+    button.innerHTML = "ADD";
   }
 
 
   /*
     API call to create/edit item
   */
-  postItem(n: HTMLInputElement, q: HTMLInputElement) {
+  postItem(n: HTMLInputElement, q: HTMLInputElement, button: HTMLInputElement) {
     if (!n || !q) {
       return;
     }
@@ -67,17 +68,24 @@ export class TableComponent implements OnInit {
       },
       (err) => this.handleError(err)
     );
-    this.clearInputs(n, q);
+    this.clearInputs(n, q, button);
   }
 
 
   /*
     Set the modal with the values I want to edit
   */
-  editItem(n: HTMLInputElement, q: HTMLInputElement, data: any) {
+  editItem(n: HTMLInputElement, q: HTMLInputElement, button: HTMLInputElement, data: any) {
     n.value = data.name;
     n.name = data.id;
     q.value = data.price;
+
+    if (!data.id) {
+      button.innerHTML = 'ADD';
+    }
+    else {
+      button.innerHTML = 'SAVE';
+    }
   }
 
 

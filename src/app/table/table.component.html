@@ -3,7 +3,7 @@
 		<h2>
 	  	Inventory Items
 	  	</h2>
-	  	<button type="button" class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#itemModal">Add new item</button>
+	  	<button type="button" class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#itemModal" (click)="clearInputs(name, quantity, postButton)">Add new item</button>
 	</header>
 	<table style="width:100%" class="table table-bordered">
 		<tr>
@@ -15,7 +15,7 @@
 		<tr *ngFor="let entry of data">
 			<td id={{entry.id}}>{{entry.name}}</td>
 			<td >{{entry.price}}</td> 
-			<td><i class="fa fa-pencil" data-toggle="modal" data-target="#itemModal" (click)="editItem(name, quantity, entry)"></i></td>
+			<td><i class="fa fa-pencil" data-toggle="modal" data-target="#itemModal" (click)="editItem(name, quantity, postButton, entry)"></i></td>
 			<td><i class="fa fa-trash" data-toggle="modal" data-target="#ruSureModal" (click)="setDeleteItemId(entry, deleteItemInput, deleteName)"></i></td>
 		</tr>
 	</table>
@@ -30,18 +30,18 @@
 			<div class="modal-body">        
 				<table>
 					<tr>
-						<th>Item Name</th>
-						<th class="black col-sm-1">Quantity</th>
+						<th #itemNameHeader>Item Name</th>
+						<th #quantityHeader class="black col-sm-1">Quantity</th>
 					</tr>
 					<tr>
-						<td><input #name type="text"></td>
-						<td><input #quantity type="number" class="lightgray"></td>
+						<td><input #name type="text" (focus)="changeHeaderColor($event, itemNameHeader, quantityHeader)"></td>
+						<td><input #quantity type="number" class="lightgray" (focus)="changeHeaderColor($event, itemNameHeader, quantityHeader)"></td>
 					</tr>
 				</table>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal" (click)="clearInputs(name, quantity)">CANCEL</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal" (click)="postItem(name, quantity)">ADD</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" (click)="clearInputs(name, quantity, postButton)">CANCEL</button>
+				<button #postButton type="button" class="btn btn-default" data-dismiss="modal" (click)="postItem(name, quantity, postButton)">ADD</button>
 			</div>
 		</div>
     </div>

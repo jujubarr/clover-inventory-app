@@ -1,3 +1,5 @@
+$cloverBlue: #5bc0de;
+
 .table-wrapper {
 	header * {
 		vertical-align: middle;
@@ -13,6 +15,14 @@
 
 	.fa {
 		cursor: pointer;
+	}
+}
+
+#itemModal button {
+	&:hover {
+		cursor: pointer;
+		color: lighten($cloverBlue, 30%);
+
 	}
 }
 
